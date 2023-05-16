@@ -24,7 +24,11 @@ def loginUser(name, passwd):
         if user[1] == passwd:
             return [user[0], True]
     return False
-def select_my_messages(id):
-    mycursor.execute('SELECT app_users.name, messages.text FROM `message-app`.messages JOIN `message-app`.app_users on messages.idmessages = app_users.id WHERE messages.idmessages = %s;', [id])
-    myresult = mycursor.fetchall()
-    print(myresult)
+def check_my_messages(id):
+    mycursor.execute('SELECT app_users.name, messages.text FROM `message-app`.messages JOIN `message-app`.app_users on messages.from = app_users.id WHERE messages.to = %s;', [id])
+    my_messages = mycursor.fetchall()
+    for message in my_messages:
+        print('-----------')
+        print('-YOUR BOX-')
+        print('FROM: ' + message[0])
+        print(message[1])
