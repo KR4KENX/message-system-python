@@ -9,11 +9,15 @@ mydb = mysql.connector.connect(
 
 mycursor = mydb.cursor()
 
-def make_query(query, isInsert, val):
-    if not isInsert:
-        mycursor.execute(query)
-        myresult = mycursor.fetchall()
-        return myresult
-    else:
-        mycursor.execute(query, val)
+def insertUser(name, passwd):
+    mycursor.execute('INSERT INTO `message-app`.`app_users` (`name`, `password`) VALUES (%s, %s);', [name, passwd])
     mydb.commit()
+def loginUser(name, passwd):
+    mycursor.execute('SELECT id, password FROM `message-app`.app_users WHERE app_users.name = %s AND app_users.password = %s;', [name, passwd])
+    myresult = mycursor.fetchall()
+    if not myresult:
+        return False
+    for user in myresult:
+        if user[1] == passwd:
+            return True
+    return False
